@@ -26,7 +26,7 @@ init();
 function init() {
   for(let i = 1; i <= 5; i++){
    const numberToRemeber =  createNumberCell();
-   pcNumArray.push(numberToRemeber);
+   pcNumArray.push(parseInt(numberToRemeber));
   }
   console.log('array dei numeri da ricordare', pcNumArray);
 
@@ -45,7 +45,7 @@ setTimeout(userPrompt, 5200);
 function userPrompt() {
   console.log(`sono passati ${sec} secondi, quali numeri ricordi?`)
   for (let i = 0; i < pcNumArray.length; i++) {
-    const userNumber = prompt('Inserisci i numeri che ricordi!');
+    const userNumber = parseInt(prompt('Inserisci i numeri che ricordi!'));
     userNumberCell(userNumber)
     score();
   }
