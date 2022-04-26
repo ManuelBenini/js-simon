@@ -15,6 +15,7 @@ Dopo che sono stati inseriti i 5 numeri, il software dice quanti e quali dei num
 const sec = 5;
 let niceMemory = 0;
 const pcNumArray = [];
+const userNumArray = [];
 const correctUserNum = [];
 
 init();
@@ -24,9 +25,9 @@ init();
  * Funzione che funge da start del programma (Crea N numero di celle)
  */
 function init() {
-  for(let i = 1; i <= 5; i++){
-   const numberToRemeber =  createNumberCell();
-   pcNumArray.push(parseInt(numberToRemeber));
+
+  while(pcNumArray.length < 5){
+    createNumberCell();
   }
   console.log('array dei numeri da ricordare', pcNumArray);
 
@@ -44,8 +45,27 @@ setTimeout(userPrompt, 5200);
  */
 function userPrompt() {
   console.log(`sono passati ${sec} secondi, quali numeri ricordi?`)
+
   for (let i = 0; i < pcNumArray.length; i++) {
-    const userNumber = parseInt(prompt('Inserisci i numeri che ricordi!'));
+    let flag = false;
+    let userNumber = parseInt(prompt('Inserisci i numeri che ricordi!'));
+
+    while(!flag){
+
+      while(isNaN(userNumber)){
+        userNumber = parseInt(prompt('Non hai inserito un numero, riprovare'));
+      }
+
+      if(!userNumArray.includes(userNumber)){
+        userNumArray.push(parseInt(userNumber));
+        flag = true;
+      }else{
+        userNumber = parseInt(prompt('Hai inserito due numeri uguali, inseriscine un altro!'));
+        flag = false;
+      }
+    }
+
+    console.log('lista numeri', userNumArray);
     userNumberCell(userNumber)
     score();
   }
@@ -78,10 +98,20 @@ function createNumberCell() {
   Cell.className = 'number-cell';
   const numberCell = document.createElement('span');
   numberCell.className = 'numbers';
-  numberCell.innerText = generateRandomNumber(1, 100);
+  numberCell.innerText = generateRandomNumber(100, 999);
+
+  let flag = false;
+  while (!flag)
+  if (!pcNumArray.includes(numberCell.innerText)) {
+    pcNumArray.push(parseInt(numberCell.innerText));
+    flag = true;
+  }else{
+    numberCell.innerText = generateRandomNumber(100, 999);
+  }
+
+
   document.querySelector('.container').append(Cell);
   Cell.append(numberCell);
-  return numberCell.innerText;
 }
 
 
@@ -89,19 +119,20 @@ function createNumberCell() {
  * Generatore celle con numeri interni (span) dell'utente
  * @param {Number} num 
  */
-function userNumberCell(num) {
+function userNumberCell(number) {
   const userContainer = document.querySelector('.mb_container');
   const userCell = document.createElement('div');
   const userNumberCell = document.createElement('span');
   userCell.className = 'number-cell';
-  if(pcNumArray.includes(num)){
+  if(pcNumArray.includes(number)){
     niceMemory++;
     userCell.classList.add('green');
-    correctUserNum.push(num);
+    correctUserNum.push(number);
   }
-  userNumberCell.innerText = num;
+  userNumberCell.innerText = number;
   userContainer.append(userCell);
   userCell.append(userNumberCell);
+  console.log('lista numeri corretti', correctUserNum);
 }
 
 
