@@ -109,7 +109,7 @@ function userNumberCell(num) {
  * Aggiunta classe "hide" agli span
  */
 function hide() {
-  for (let i = 1; i = 5; i++) {
+  for (let i = 1; i <= 5; i++) {
     document.querySelector('.numbers').className = 'hide';
   }
   return
