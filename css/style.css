@@ -1,0 +1,44 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  background-color: rgb(97, 33, 33);
+}
+
+.container,
+.mb_container{
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: blue;
+}
+
+.number-cell{
+  height: 20vh;
+  width: 20vh;
+  background-color: purple;
+  color: yellow;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 70px;
+  margin: 20px;
+}
+
+.correct-numbers{
+  text-align: center;
+  font-size: 30px;
+  background-color: blue;
+}
+
+.hide{
+  display: none;
+}
+
+.green{
+  background-color: green;
+}
