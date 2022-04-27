@@ -12,8 +12,9 @@ Dopo che sono stati inseriti i 5 numeri, il software dice quanti e quali dei num
 4. Una volta inseriti i numeri, verificare quanti e quali sono quelli corretti e visualizzare.
 */
 
-const sec = 5;
-let niceMemory = 0;
+let secondsToWait = 5;
+let correctUserNumCounter = 0;
+const totalNumbers = 5;
 const pcNumArray = [];
 const userNumArray = [];
 const correctUserNum = [];
@@ -21,30 +22,53 @@ const correctUserNum = [];
 init();
 
 
+
+/***********************
+    TIMING FUNCTIONS
+*************************/
+
+// Countdown per far sparire i numeri
+const countDown = setInterval(function(){
+  document.getElementById('numeri-giusti').innerHTML = `Hai ${--secondsToWait} secondi per memorizzare i seguenti numeri`
+}, 1000)
+
+// Aggiunta classe Hide agli span dopo 5 secondi
+setTimeout(hide, secondsToWait * 1000);
+
+// Messaggio dopo countdown
+setTimeout(function(){
+  clearInterval(countDown);
+  document.getElementById('numeri-giusti').innerHTML = `Ed adesso, quali ricordi?`
+}, secondsToWait * 1000)
+
+// Inserimento numeri per l'utente (Prompt) dopo 5 secondi
+setTimeout(userPrompt, (secondsToWait + 1) * 1000);
+
+
+
+
+
+/***********************
+        FUNZIONI
+*************************/
+
+
 /**
  * Funzione che funge da start del programma (Crea N numero di celle)
  */
-function init() {
-
-  while(pcNumArray.length < 5){
+ function init() {
+  while(pcNumArray.length < totalNumbers){
     createNumberCell();
   }
   console.log('array dei numeri da ricordare', pcNumArray);
-
 }
-
-// Aggiunta classe Hide agli span dopo 5 secondi
-setTimeout(hide, 5000);
-
-// Inserimento numeri per l'utente dopo 5 secondi
-setTimeout(userPrompt, 5200);
 
 
 /**
  * Prompt per far inserire all'utente i numeri che ricorda
  */
 function userPrompt() {
-  console.log(`sono passati ${sec} secondi, quali numeri ricordi?`)
+  console.log(`sono passati ${secondsToWait} secondi, quali numeri ricordi?`)
 
   for (let i = 0; i < pcNumArray.length; i++) {
     let flag = false;
@@ -77,14 +101,15 @@ function userPrompt() {
  * Stampa quanto punti l'utente ha fatto
  */
 function score() {
-  if (niceMemory === 1) {
-    document.getElementById('numeri-giusti').innerHTML = `Hai indovinato ${niceMemory} solo numero! {${correctUserNum}}`
-  }else if (niceMemory > 1 && niceMemory < 5) {
-    document.getElementById('numeri-giusti').innerHTML = `Hai indovinato ${niceMemory} numeri! {${correctUserNum}}`
-  }else if (niceMemory === 5) {
-    document.getElementById('numeri-giusti').innerHTML = `Hai indovinato tutti i numeri! {${correctUserNum}}`
+  const finalScore = document.getElementById('numeri-giusti');
+  if (correctUserNumCounter === 1) {
+    finalScore.innerHTML = `Hai indovinato ${correctUserNumCounter} solo numero! {${correctUserNum}}`
+  }else if (correctUserNumCounter > 1 && correctUserNumCounter < totalNumbers) {
+    finalScore.innerHTML = `Hai indovinato ${correctUserNumCounter} numeri! {${correctUserNum}}`
+  }else if (correctUserNumCounter === totalNumbers) {
+    finalScore.innerHTML = `Hai indovinato tutti i numeri! {${correctUserNum}}`
   }else{
-    document.getElementById('numeri-giusti').innerHTML = `Non hai indovinato nessun numero :(`
+    finalScore.innerHTML = `Non hai indovinato nessun numero :(`
   }
 }
 
@@ -109,7 +134,6 @@ function createNumberCell() {
     numberCell.innerText = generateRandomNumber(100, 999);
   }
 
-
   document.querySelector('.container').append(Cell);
   Cell.append(numberCell);
 }
@@ -125,7 +149,7 @@ function userNumberCell(number) {
   const userNumberCell = document.createElement('span');
   userCell.className = 'number-cell';
   if(pcNumArray.includes(number)){
-    niceMemory++;
+    correctUserNumCounter++;
     userCell.classList.add('green');
     correctUserNum.push(number);
   }
@@ -140,7 +164,7 @@ function userNumberCell(number) {
  * Aggiunta classe "hide" agli span
  */
 function hide() {
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= totalNumbers; i++) {
     document.querySelector('.numbers').className = 'hide';
   }
   return
@@ -151,7 +175,7 @@ function hide() {
  * Rimozione classe "hide" agli span
  */
  function removeHide() {
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < totalNumbers; i++) {
     document.querySelector('.hide').className = '.numbers';
   }
 }
